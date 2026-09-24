@@ -1,36 +1,47 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
 <head>
     <meta charset="UTF-8">
     <title>Bookstore</title>
 </head>
+
 <body>
 
-<h1>Books</h1>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out" />
+    </form>
 
-<table>
-    <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Publication Year</th>
-        <th>ISBN</th>
-        <th>Price</th>
-        <th>Category</th>
-    </tr>
+    <h1>Books</h1>
+    <h2>Hello <Span sec:authentication="name"></Span></Span></h2>
 
-    <tr th:each="book : ${books}">
-        <td th:text="${book.title}"></td>
-        <td th:text="${book.author}"></td>
-        <td th:text="${book.publicationYear}"></td>
-        <td th:text="${book.isbn}"></td>
-        <td th:text="${book.price}"></td>
-        <td th:text="${book.category.name}"></td>
-        <td>
-            <a th:href="@{/delete/{id}(id=${book.id})}">Delete</a>
-            <a th:href="@{/edit/{id}(id=${book.id})}">Edit</a>
-        </td>
-    </tr>
-</table>
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Publication Year</th>
+            <th>ISBN</th>
+            <th>Price</th>
+            <th>Category</th>
+        </tr>
+
+        <tr th:each="book : ${books}">
+            <td th:text="${book.title}"></td>
+            <td th:text="${book.author}"></td>
+            <td th:text="${book.publicationYear}"></td>
+            <td th:text="${book.isbn}"></td>
+            <td th:text="${book.price}"></td>
+            <td th:text="${book.category.name}"></td>
+            <td>
+                <a sec:authorize="hasRole('ADMIN')" 
+                    th:href="@{/delete/{id}(id=${book.id})}">Delete</a>
+
+
+                <a th:href="@{/edit/{id}(id=${book.id})}">Edit</a>
+            </td>
+        </tr>
+    </table>
 
 </body>
+
 </html>
